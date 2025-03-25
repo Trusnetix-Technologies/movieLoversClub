@@ -1,0 +1,16 @@
+{
+  "name": "movieloversclub",
+  "version": "1.0.0",
+  "description": "A small site to teach students about MERN apps",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "author": "Shubhasmit",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.12.1"
+  }
+}
