@@ -8,13 +8,13 @@ module.exports = (app) => {
     res.send("Hi there! Also, Yay!");
   });
 
-  app.get("/get/movies", async (req, res) => {
+  app.get("/api/v1/get/movies", async (req, res) => {
     console.log("Movies List");
-    const response = await Movie.find();
+    const response = await Movie.find().populate("director", "name phone");
     res.send(response);
   });
 
-  app.post("/add/movie", async (req, res) => {
+  app.post("/api/v1/add/movie", async (req, res) => {
     const { name, director, duration, genre, description, score, image } =
       req.body;
 

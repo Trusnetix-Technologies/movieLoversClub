@@ -1,11 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
-require("dotenv").config();
+require("dotenv").config(); // Load environment variables
 
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const app = express(); // Create Express app
+app.use(express.json()); // Parse JSON bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
+// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {}).then(() => {
   console.log("Connected to MongoDB succesfully. Double Yay!");
 });
@@ -18,6 +19,7 @@ require("./models/User");
 require("./routes/movieRoutes")(app);
 require("./routes/userRoutes")(app);
 
+// Start the server
 app.listen(process.env.PORT, () => {
   console.log("Server is running. Yay! Port: ", process.env.PORT);
 });
