@@ -11,13 +11,18 @@ mongoose.connect(process.env.MONGO_URI, {}).then(() => {
   console.log("Connected to MongoDB succesfully. Double Yay!");
 });
 
-// IMPORT MODELS
+// ==== IMPORT MODELS ====
 require("./models/movie");
 require("./models/User");
 
-// IMPORT ROUTES
-require("./routes/movieRoutes")(app);
-require("./routes/userRoutes")(app);
+// ==== IMPORT ROUTES ====
+// ---- COMMON ----`
+require("./routes/authRoutes")(app);
+
+// ---- ADMIN ----
+require("./routes/admin/userRoutes")(app);
+
+// ---- USER ----
 
 // Start the server
 app.listen(process.env.PORT, () => {
