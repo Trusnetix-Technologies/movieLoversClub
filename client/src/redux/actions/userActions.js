@@ -15,3 +15,17 @@ export const getUsers = async (values) => {
   });
   return res;
 };
+
+export const deleteMultipleUsers = async (values) => {
+  const cookieData = await cookies.getAll();
+  try {
+    const res = await axios.post("/api/v1/admin/delete/many/user", values, {
+      headers: {
+        Authorization: cookieData.userToken,
+      },
+    });
+    return res;
+  } catch (error) {
+    return error.response;
+  }
+};

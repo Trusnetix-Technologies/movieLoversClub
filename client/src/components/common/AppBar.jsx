@@ -149,7 +149,7 @@ export default function MiniDrawer({ children, selectedMenuItem }) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Mini variant drawer
+            SpoilerAlert
           </Typography>
         </Toolbar>
       </AppBar>
