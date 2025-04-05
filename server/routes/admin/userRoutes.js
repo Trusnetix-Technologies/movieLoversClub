@@ -25,7 +25,7 @@ module.exports = (app) => {
       const orderBy = req.body.orderBy ?? null;
       const orderDirection = req.body.order ?? "";
       const filter = req.body.filter;
-      const select = "-otp -status -createdAt -updatedAt"; // select the fields to be returned
+      const select = "-otp "; // select the fields to be returned
 
       let query = {
         status: "ACTIVE",

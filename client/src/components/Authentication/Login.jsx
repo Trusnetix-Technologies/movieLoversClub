@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Box, Typography, Paper, Grid, TextField, Button } from "@mui/material";
 
 // ==== IMPORT ACTIONS ====
 import { sendOtp, verifyOtp } from "@/redux/actions/authActions";
 
+// ==== IMPORT REDUX ====
+import { fetchCurrentUser } from "@/redux/reducers/authReducer";
+
 const Login = () => {
+  const dispatch = useDispatch();
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [showOtp, setShowOtp] = useState(false);
@@ -39,6 +44,7 @@ const Login = () => {
     const response = await verifyOtp(phone, otp);
     if (response.status === 200) {
       // dispatch fetch user
+      dispatch(fetchCurrentUser());
     } else {
       setErrors({ otp: "Failed to verify OTP" });
     }
