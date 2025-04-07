@@ -21,6 +21,7 @@ export const fetchCurrentUser = createAsyncThunk("currentuser", async () => {
         Authorization: cookieData.userToken,
       },
     });
+    console.log("response", response.data);
     return response.data;
   } catch (error) {
     throw { error: error.message };

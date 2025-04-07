@@ -1,6 +1,5 @@
-import MyDataTable from "@/components/common/MyTable";
+import MyDataTable, { MyTableToolButton } from "mui-datatable";
 import Iconify from "@/components/common/Iconify";
-import { MyTableToolButton } from "@/styles/mui/tableComponents";
 import { useState, useRef, useContext } from "react";
 import moment from "moment";
 import AlertDialog from "@/components/common/AlertDialog";

@@ -24,7 +24,9 @@ export default function LoginPage() {
       if (auth.authData.role == "ADMIN") {
         router.push("/admin");
       } else {
-        // router.push("/");
+        if (auth.authData.role == "USER") {
+          router.push("/");
+        }
       }
     }
   }, [auth.loading]);
