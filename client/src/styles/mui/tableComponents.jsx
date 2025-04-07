@@ -245,7 +245,7 @@ export const MyPrimarySelect = styled(Select)(({ theme }) => ({
   },
 }));
 
-export const MyPrimaryButton = styled(Button)(({ theme }) => ({
+export const PrimaryButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
   color: theme.palette.primary.contrastText,
   "&:hover": {
