@@ -39,9 +39,9 @@ const UsersTable = () => {
         tableRef={tableRef}
         title="Users"
         columns={[
-          { title: "Name", field: "name" },
-          { title: "Role", field: "role" },
-          { title: "Phone", field: "phone" },
+          { title: "Name", field: "name", searchable: true },
+          { title: "Role", field: "role", searchable: true },
+          { title: "Phone", field: "phone", searchable: true },
           {
             title: "Created At",
             field: "createdAt",
