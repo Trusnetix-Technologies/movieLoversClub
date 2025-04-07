@@ -48,7 +48,7 @@ const currentUserSlice = createSlice({
     });
     builder.addCase(fetchCurrentUser.rejected, (state, action) => {
       state.authData = "error";
-      state.loading = "loaded";
+      state.loading = "error";
       state.error = "error";
     });
   },

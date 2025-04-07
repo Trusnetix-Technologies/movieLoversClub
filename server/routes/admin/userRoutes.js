@@ -93,8 +93,8 @@ module.exports = (app) => {
       req.body
     );
     try {
-      const { id, name, phone, plan } = req.body;
-      const user = await User.findById(id);
+      const { _id, name, phone, plan, role } = req.body;
+      const user = await User.findById(_id);
       if (!user) {
         return res.status(400).json(errorCodes.user_not_found);
       }
@@ -102,11 +102,9 @@ module.exports = (app) => {
       if (name) updateFields.name = name.trim();
       if (phone) updateFields.phone = phone.trim();
       if (plan) updateFields.plan = plan.trim();
+      if (role) updateFields.role = role.trim();
 
-      const updatedUser = await User.updateOne(
-        { _id: id },
-        { $set: updateFields }
-      );
+      const updatedUser = await User.updateOne({ _id }, { $set: updateFields });
       if (updatedUser.modifiedCount === 0) {
         return res.status(400).json(errorCodes.unable_to_update_details);
       }

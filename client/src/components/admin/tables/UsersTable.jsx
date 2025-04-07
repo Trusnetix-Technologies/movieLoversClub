@@ -4,7 +4,7 @@ import { MyTableToolButton } from "@/styles/mui/tableComponents";
 import { useState, useRef, useContext } from "react";
 import moment from "moment";
 import AlertDialog from "@/components/common/AlertDialog";
-
+import { useRouter } from "next/router";
 // ==== IMPORT ACTIONS ====
 import { getUsers, deleteMultipleUsers } from "@/redux/actions/userActions";
 import StoreHooks from "@/redux/contextProvider/storeHooks";
@@ -12,6 +12,7 @@ import StoreHooks from "@/redux/contextProvider/storeHooks";
 const UsersTable = () => {
   const tableRef = useRef();
   const storeHooks = useContext(StoreHooks);
+  const router = useRouter();
 
   // ==== ALERT ====
   const [action, setAction] = useState("");
@@ -68,6 +69,19 @@ const UsersTable = () => {
               });
           })
         }
+        actions={[
+          {
+            icon: <Iconify icon="mdi:edit-outline" />,
+            tooltip: "Edit",
+            iconProps: { color: "success" },
+            onClick: (event, rowData) => {
+              router.push({
+                pathname: `/admin/users/edit`,
+                query: { id: rowData._id },
+              });
+            },
+          },
+        ]}
         tools={[
           {
             title: "Delete",

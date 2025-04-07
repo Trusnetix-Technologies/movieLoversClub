@@ -194,6 +194,8 @@ export default function MiniDrawer({ children, selectedMenuItem }) {
                       {
                         minWidth: 0,
                         justifyContent: "center",
+                        color:
+                          selectedMenuItem === item.label ? "white" : "black",
                       },
                       open
                         ? {
