@@ -20,7 +20,13 @@ import ListItemText from "@mui/material/ListItemText";
 import BookIcon from "@mui/icons-material/Book";
 // ==== IMPORT ICONS ====
 import HomeIcon from "@mui/icons-material/Home";
-import AdminIcon from "@mui/icons-material/AdminPanelSettings";
+import UserIcon from "@mui/icons-material/Person";
+import LogoutIcon from "@mui/icons-material/Logout";
+
+// ==== IMPORT PROVIDERS ====
+import { logout } from "../../redux/actions/authActions";
+import { useDispatch } from "react-redux";
+import { fetchCurrentUser } from "@/redux/reducers/authReducer";
 
 const drawerWidth = 240;
 
@@ -104,6 +110,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function MiniDrawer({ children, selectedMenuItem }) {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
@@ -122,7 +129,7 @@ export default function MiniDrawer({ children, selectedMenuItem }) {
     },
     {
       label: "Users",
-      icon: <AdminIcon />,
+      icon: <UserIcon />,
       href: "/admin/users",
     },
     {
@@ -230,6 +237,24 @@ export default function MiniDrawer({ children, selectedMenuItem }) {
             </Link>
           ))}
         </List>
+        <Divider />
+        {/* ==== LOGOUT ==== */}
+        <ListItemButton
+          sx={{
+            position: "absolute",
+            bottom: 100,
+            width: "100%",
+          }}
+        >
+          <ListItemIcon>
+            <LogoutIcon
+              onClick={() => {
+                logout();
+                dispatch(fetchCurrentUser());
+              }}
+            />
+          </ListItemIcon>
+        </ListItemButton>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
