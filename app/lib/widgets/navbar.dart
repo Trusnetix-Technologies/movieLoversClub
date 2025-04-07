@@ -4,6 +4,7 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 // ==== IMPORT SCREENS ====
 import '../screens/home_screen.dart';
 import '../screens/settings_screen.dart';
+import '../screens/map_screen.dart';
 
 class Navbar extends StatefulWidget {
   const Navbar({super.key});
@@ -19,6 +20,7 @@ class _NavbarState extends State<Navbar> {
   List<Widget> _buildScreens() {
     return [
       HomeScreen(),
+      MapScreen(),
       SettingsScreen(),
     ];
   }
@@ -30,26 +32,18 @@ class _NavbarState extends State<Navbar> {
         title: ("Home"),
         activeColorPrimary: Colors.white,
         inactiveColorPrimary: Colors.white,
-        routeAndNavigatorSettings: RouteAndNavigatorSettings(
-          initialRoute: "/",
-          routes: {
-            "/first": (final context) => const HomeScreen(),
-            "/second": (final context) => const SettingsScreen(),
-          },
-        ),
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.map),
+        title: ("Map"),
+        activeColorPrimary: Colors.white,
+        inactiveColorPrimary: Colors.white,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.settings),
         title: ("Settings"),
         activeColorPrimary: Colors.white,
         inactiveColorPrimary: Colors.white,
-        routeAndNavigatorSettings: RouteAndNavigatorSettings(
-          initialRoute: "/",
-          routes: {
-            "/first": (final context) => const HomeScreen(),
-            "/second": (final context) => const SettingsScreen(),
-          },
-        ),
       ),
     ];
   }
