@@ -78,7 +78,6 @@ const Onboard = () => {
               sx={{ mb: 3 }}
               required
             />
-
             <Button
               type="submit"
               fullWidth

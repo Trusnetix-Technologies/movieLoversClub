@@ -35,4 +35,29 @@ module.exports = (app) => {
       res.status(500).json({ error: error.message });
     }
   });
+
+  // =======================
+  // ==== SEARCH MOVIES ====
+  // =======================
+  app.get("/api/v1/search/movies/:search", async (req, res) => {
+    console.log("Searching for movies");
+    try {
+      const { search } = req.params;
+      const response = await Movie.find({
+        $or: [
+          { name: { $regex: search, $options: "i" } },
+          { director: { $regex: search, $options: "i" } },
+          { genre: { $regex: search, $options: "i" } },
+          { description: { $regex: search, $options: "i" } },
+        ],
+      });
+      if (response.length === 0) {
+        res.status(404).json({ message: "No movies found" });
+        return;
+      }
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
 };
