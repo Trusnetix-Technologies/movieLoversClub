@@ -27,6 +27,10 @@ const errorCodes = {
     code: 400,
     message: "Unable to update details. Please try again later.",
   },
+  blog_not_found: {
+    code: 400,
+    message: "Blog post not found",
+  },
 };
 
 module.exports = errorCodes;

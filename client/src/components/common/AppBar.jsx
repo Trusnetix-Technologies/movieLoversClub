@@ -17,7 +17,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-
+import BookIcon from "@mui/icons-material/Book";
 // ==== IMPORT ICONS ====
 import HomeIcon from "@mui/icons-material/Home";
 import AdminIcon from "@mui/icons-material/AdminPanelSettings";
@@ -124,6 +124,11 @@ export default function MiniDrawer({ children, selectedMenuItem }) {
       label: "Users",
       icon: <AdminIcon />,
       href: "/admin/users",
+    },
+    {
+      label: "Blog",
+      icon: <BookIcon />,
+      href: "/admin/blog",
     },
   ];
 

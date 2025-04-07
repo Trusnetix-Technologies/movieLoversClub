@@ -14,6 +14,7 @@ mongoose.connect(process.env.MONGO_URI, {}).then(() => {
 // ==== IMPORT MODELS ====
 require("./models/movie");
 require("./models/User");
+require("./models/Blog");
 
 // ==== IMPORT ROUTES ====
 // ---- COMMON ----`
@@ -21,7 +22,7 @@ require("./routes/authRoutes")(app);
 
 // ---- ADMIN ----
 require("./routes/admin/userRoutes")(app);
-
+require("./routes/admin/blogRoutes")(app);
 // ---- USER ----
 
 // Start the server
