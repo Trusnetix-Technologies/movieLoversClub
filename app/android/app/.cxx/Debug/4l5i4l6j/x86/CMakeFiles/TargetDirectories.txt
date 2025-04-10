@@ -1,0 +1,2 @@
+/Users/shubhasmit/development/projects/movieLoversClub/movieLoversClub/app/android/app/.cxx/Debug/4l5i4l6j/x86/CMakeFiles/edit_cache.dir
+/Users/shubhasmit/development/projects/movieLoversClub/movieLoversClub/app/android/app/.cxx/Debug/4l5i4l6j/x86/CMakeFiles/rebuild_cache.dir
