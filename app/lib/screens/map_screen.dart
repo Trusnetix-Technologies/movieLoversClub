@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 import 'package:latlong2/latlong.dart';
 
@@ -40,10 +40,14 @@ class _MapScreenState extends State<MapScreen> {
               attributions: [
                 TextSourceAttribution(
                   'OpenStreetMap contributors',
-                  onTap: () => launchUrl(Uri.parse(
-                      'https://openstreetmap.org/copyright')), // (external)
-                ),
-                // Also add images...
+                  //   onTap: () => launchUrl(Uri.parse(
+                  //       'https://openstreetmap.org/copyright')), // (external)
+                  // ),
+                  // Also add images...
+                  onTap: () {
+                    print("Tapped");
+                  },
+                )
               ],
             ),
           ],

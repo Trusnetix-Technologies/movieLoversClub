@@ -107,7 +107,9 @@ module.exports = (app) => {
         { $set: { lastLogin: Date.now() } }
       );
 
-      res.status(200).json({ message: "OTP verified successfully", token });
+      res
+        .status(200)
+        .json({ message: "OTP verified successfully", user, token });
     } catch (err) {
       console.log("==== VERIFY OTP ERROR ==== \n error:", err);
       res.status(400).json(errorCodes.server_error);

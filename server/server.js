@@ -24,6 +24,7 @@ require("./routes/authRoutes")(app);
 require("./routes/admin/userRoutes")(app);
 require("./routes/admin/blogRoutes")(app);
 // ---- USER ----
+require("./routes/user/blogRoutes")(app);
 
 // Start the server
 app.listen(process.env.PORT, () => {

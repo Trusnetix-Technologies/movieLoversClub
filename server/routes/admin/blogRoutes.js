@@ -50,13 +50,13 @@ module.exports = (app) => {
 
       const sortBy = orderBy ? { [orderBy]: orderDirection } : { name: "desc" };
 
-      const bank = await Blog.find(query, select)
+      const blogs = await Blog.find(query, select)
         .sort(sortBy)
         .skip(skip)
         .limit(limit);
 
       const totalCount = await Blog.countDocuments(query);
-      res.json({ data: bank, total: totalCount, page: skip });
+      res.json({ data: blogs, total: totalCount, page: skip });
     } catch (err) {
       console.log(
         `==== ${ROUTE_TYPE} GET BLOG POSTS ERROR ==== \n error:`,
@@ -75,9 +75,7 @@ module.exports = (app) => {
       req.body
     );
     try {
-      const blog = await Blog.findById(req.params.id).select(
-        "-otp -status -createdAt -updatedAt"
-      );
+      const blog = await Blog.findById(req.params.id).select("");
       if (!blog) {
         return res.status(400).json(errorCodes.blog_not_found);
       }
@@ -146,9 +144,9 @@ module.exports = (app) => {
     }
   });
 
-  // =============================
+  // =================================
   // ==== DELETE BLOG POSTS BY ID ====
-  // =============================
+  // =================================
   app.post("/api/v1/admin/delete/many/blog", requireLogin, async (req, res) => {
     console.log(
       `==== ${ROUTE_TYPE} DELETE MANY BLOG POSTS ==== \n body:`,
