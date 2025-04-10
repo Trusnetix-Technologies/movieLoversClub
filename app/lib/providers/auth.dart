@@ -80,12 +80,13 @@ class Auth with ChangeNotifier {
       );
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
+        debugPrint("responseBody: $responseBody");
         _token = responseBody['token'];
         _userId = responseBody['user']['_id'];
         _phone = responseBody['user']['phone'];
         _name = responseBody['user']['name'];
         _status = responseBody['user']['status'];
-        _onboarded = responseBody['user']['onboarded'];
+        _onboarded = responseBody['user']['isOnboarded'];
         await setSharedPreference();
         notifyListeners();
       }
@@ -157,7 +158,7 @@ class Auth with ChangeNotifier {
         _phone = responseBody['phone'];
         _name = responseBody['name'];
         _status = responseBody['status'];
-        _onboarded = responseBody['onboarded'];
+        _onboarded = responseBody['isOnboarded'];
         await setSharedPreference();
         notifyListeners();
         return true;

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
+// ==== PROVIDER ====
+import 'package:provider/provider.dart';
+import 'package:app/providers/auth.dart';
+
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen();
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<Auth>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
         title: Text("Settings Screen", style: TextStyle(color: Colors.white)),
@@ -12,12 +17,11 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: Container(
         child: Center(
-          child: Text(
-            "Settings Screen",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+          child: ElevatedButton(
+            onPressed: () {
+              auth.logout();
+            },
+            child: Text("Logout"),
           ),
         ),
       ),

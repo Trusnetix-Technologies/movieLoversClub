@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 // ==== IMPORT PROVIDERS ====
 import 'package:app/providers/auth.dart';
+import 'package:app/providers/blog.dart';
 
 // ==== IMPORT WIDGETS ====
 import 'package:app/widgets/navbar.dart';
@@ -27,8 +28,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => Auth(),
         ),
+        ChangeNotifierProxyProvider<Auth, Blog>(
+          create: (_) => Blog(),
+          update: (ctx, auth, previousBlogs) => previousBlogs!
+            ..update(
+              auth.token,
+            ),
+        ),
       ],
       child: Consumer<Auth>(builder: (context, auth, _) {
+        debugPrint("auth: ${auth.token}");
         return MaterialApp(
           title: 'MovieLoversClub',
           theme: ThemeData(
@@ -376,7 +385,15 @@ class MyApp extends StatelessWidget {
               ? auth.onboarded == true
                   ? const Navbar()
                   : const OnboardingScreen()
-              : const LoginScreen(),
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    return LoginScreen();
+                  },
+                ),
         );
       }),
     );
