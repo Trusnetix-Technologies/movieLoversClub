@@ -34,8 +34,8 @@ class _NavbarState extends State<Navbar> {
         inactiveColorPrimary: Colors.white,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.map),
-        title: ("Map"),
+        icon: Icon(Icons.add),
+        title: ("Add"),
         activeColorPrimary: Colors.white,
         inactiveColorPrimary: Colors.white,
       ),
@@ -61,7 +61,7 @@ class _NavbarState extends State<Navbar> {
       stateManagement: true, // Default is true.
       hideNavigationBarWhenKeyboardAppears: true,
       padding: const EdgeInsets.only(top: 8),
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).cardColor,
       isVisible: true,
       animationSettings: const NavBarAnimationSettings(
         navBarItemAnimation: ItemAnimationSettings(

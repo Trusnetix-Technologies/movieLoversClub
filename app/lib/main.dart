@@ -213,32 +213,33 @@ class MyApp extends StatelessWidget {
           ),
           darkTheme: ThemeData(
             brightness: Brightness.dark,
+            useMaterial3: true,
             primaryColor: Colors.blue,
-            highlightColor: Color.fromRGBO(35, 48, 57, 1),
-            cardColor: Color.fromRGBO(8, 37, 8, 1),
-            dialogBackgroundColor: Color.fromRGBO(37, 52, 35, 1),
             scaffoldBackgroundColor:
-                Color.fromRGBO(2, 31, 1, 1), // dark mode green background
-            hintColor: Color.fromRGBO(238, 111, 113, 1),
-            fontFamily: 'Inter',
+                const Color(0xFF1C1B1F), // M3 dark background
+            cardColor:
+                const Color(0xFF2C2C2C), // Slightly lighter than background
+            dialogBackgroundColor: const Color(0xFF2C2C2C),
             colorScheme: ColorScheme.dark(
               primary: Colors.blue,
-              secondary: Color.fromRGBO(12, 71, 12, 1),
-              tertiary: Color.fromRGBO(168, 158, 138, 1),
-              primaryContainer: Color.fromRGBO(3, 49, 1, 1),
+              secondary: Colors.blueAccent,
+              tertiary: Colors.lightBlue,
+              surface: const Color(0xFF2C2C2C),
+              background: const Color(0xFF1C1B1F),
             ),
-            dividerColor: Color.fromRGBO(167, 167, 167, 0.2),
+            dividerColor: const Color(0xFF49454F), // M3 dark outline
+            fontFamily: 'Inter',
             textTheme: const TextTheme(
               displayLarge: TextStyle(
-                  fontFamily: 'EB Garamond',
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff6868AC)),
+                fontFamily: 'EB Garamond',
+                fontSize: 14.0,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFD0BCFF), // M3 dark primary
+              ),
               displayMedium: TextStyle(
                 fontFamily: 'EB Garamond',
                 fontSize: 45.0,
                 fontWeight: FontWeight.w400,
-                color: Colors.white,
               ),
               displaySmall: TextStyle(
                 fontFamily: 'EB Garamond',
@@ -290,7 +291,7 @@ class MyApp extends StatelessWidget {
                 fontFamily: 'Inter',
                 fontSize: 11.0,
                 fontWeight: FontWeight.w500,
-                color: Color(0xfffafaff),
+                color: Color.fromARGB(165, 250, 250, 255),
               ), // button
               bodyLarge: TextStyle(
                 fontFamily: 'Inter',
@@ -301,7 +302,7 @@ class MyApp extends StatelessWidget {
                 fontFamily: 'Inter',
                 fontSize: 14.0,
                 fontWeight: FontWeight.w400,
-                color: Color.fromRGBO(208, 208, 208, 1),
+                color: Color(0xFFE6E1E5), // M3 dark on-surface
               ), // bodyText 2
               bodySmall: TextStyle(
                 fontFamily: 'Inter',
@@ -309,11 +310,11 @@ class MyApp extends StatelessWidget {
               ),
             ),
             iconTheme: const IconThemeData(
-              color: Color(0xffFAFAFF),
+              color: Color(0xFFE6E1E5), // M3 dark on-surface
             ),
             cardTheme: CardTheme(
-              color: const Color.fromRGBO(8, 37, 8, 1),
-              elevation: 10,
+              color: const Color(0xFF2C2C2C),
+              elevation: 2,
               shadowColor: Colors.black26,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16.0),
@@ -353,28 +354,28 @@ class MyApp extends StatelessWidget {
               hintStyle: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
-                color: Colors.white,
+                color: const Color(0xFF938F99), // M3 dark on-surface-variant
                 fontWeight: FontWeight.w400,
               ),
-              prefixIconColor: Colors.white,
+              prefixIconColor: const Color(0xFF938F99),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(
-                  color: Color.fromRGBO(7, 51, 7, 1),
-                  width: 2,
+                borderSide: const BorderSide(
+                  color: Color(0xFF49454F), // M3 dark outline
+                  width: 1,
                 ),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(
-                  color: Color.fromRGBO(7, 51, 7, 1),
-                  width: 2,
+                borderSide: const BorderSide(
+                  color: Color(0xFF49454F), // M3 dark outline
+                  width: 1,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(
-                  color: Color.fromRGBO(7, 51, 7, 1),
+                borderSide: const BorderSide(
+                  color: Colors.blue,
                   width: 2,
                 ),
               ),
