@@ -43,6 +43,11 @@ const Header = () => {
               open={Boolean(anchorEl)}
               onClose={() => setAnchorEl(null)}
             >
+              {auth.authData.role === "ADMIN" && (
+                <MenuItem onClick={() => router.push("/admin")}>
+                  Admin Panel
+                </MenuItem>
+              )}
               <MenuItem
                 onClick={() => {
                   setAnchorEl(null);
