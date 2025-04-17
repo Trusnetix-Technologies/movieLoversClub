@@ -90,6 +90,13 @@ module.exports = (app) => {
             localField: "_id",
             foreignField: "blog",
             as: "comments",
+            pipeline: [
+              {
+                $match: {
+                  status: "ACTIVE",
+                },
+              },
+            ],
           },
         },
         {
@@ -159,7 +166,12 @@ module.exports = (app) => {
       if (!blog) {
         return res.status(400).json(errorCodes.blog_not_found);
       }
-      return res.json({ ...blog._doc, comments, likesCount });
+      return res.json({
+        ...blog._doc,
+        comments,
+        commentsCount: comments.length,
+        likesCount,
+      });
     } catch (err) {
       console.log(
         `==== ${ROUTE_TYPE} GET BLOG POST BY ID ERROR ==== \n error:`,
