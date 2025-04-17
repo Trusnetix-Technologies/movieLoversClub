@@ -1,4 +1,6 @@
 import moment from "moment";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import Iconify from "@/components/common/Iconify";
 import { Box, Avatar, Paper, Typography, useTheme } from "@mui/material";
 
@@ -12,8 +14,9 @@ import {
   fetchBlogPosts,
   selectBlogPosts,
 } from "@/redux/reducers/user/blogPostReducer";
-const BlogPost = ({ post }) => {
+const BlogPost = ({ post, fetchData, showLess }) => {
   const theme = useTheme();
+  const router = useRouter();
   const dispatch = useDispatch();
   const likes = useSelector(selectLikes);
 
@@ -26,13 +29,11 @@ const BlogPost = ({ post }) => {
     const res = await likeBlogPost(values);
     if (res.status === 200) {
       dispatch(fetchMyLikes());
-      const values = {
-        page: 0,
-        pageSize: 10,
-      };
-      dispatch(fetchBlogPosts(values));
+      fetchData();
     }
   };
+
+  const maxLength = 600;
 
   return (
     <Paper
@@ -53,23 +54,52 @@ const BlogPost = ({ post }) => {
           {moment(post.createdAt).fromNow()}
         </Typography>
       </Box>
-      <Typography variant="body1">{post.content}</Typography>
-      <Box display="flex" alignItems="center" mt={2}>
-        <IconButton onClick={handleLike}>
-          <Iconify
-            icon={
-              likes.likes.find((like) => like.blog === post._id)
-                ? "material-symbols:favorite"
-                : "material-symbols:favorite-outline"
-            }
-            sx={{
-              color: likes.likes.find((like) => like.blog === post._id)
-                ? theme.palette.error.main
-                : theme.palette.text.primary,
+      <Typography variant="body1" mb={2}>
+        {showLess ? post.content.slice(0, maxLength) + "..." : post.content}
+      </Typography>
+      {showLess && post.content.length > maxLength && (
+        <Link
+          href={{
+            pathname: `/blog`,
+            query: { id: post._id, title: post.title },
+          }}
+        >
+          <Typography variant="body2" color="error.main">
+            Read More
+          </Typography>
+        </Link>
+      )}
+      <Box display="flex" alignItems="center" gap={2}>
+        <Box display="flex" alignItems="center" mt={2}>
+          <IconButton onClick={handleLike}>
+            <Iconify
+              icon={
+                likes.likes.find((like) => like.blog === post._id)
+                  ? "material-symbols:favorite"
+                  : "material-symbols:favorite-outline"
+              }
+              sx={{
+                color: likes.likes.find((like) => like.blog === post._id)
+                  ? theme.palette.error.main
+                  : theme.palette.text.primary,
+              }}
+            />
+          </IconButton>
+          <Typography variant="body1">{post.likesCount ?? 0}</Typography>
+        </Box>
+        <Box display="flex" alignItems="center" mt={2}>
+          <IconButton
+            onClick={() => {
+              router.push({
+                pathname: `/blog`,
+                query: { id: post._id, title: post.title },
+              });
             }}
-          />
-        </IconButton>
-        <Typography variant="body1">{post.likesCount ?? 0}</Typography>
+          >
+            <Iconify icon="iconamoon:comment-light" />
+          </IconButton>
+          <Typography variant="body1">{post.commentsCount ?? 0}</Typography>
+        </Box>
       </Box>
     </Paper>
   );

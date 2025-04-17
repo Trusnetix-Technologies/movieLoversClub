@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
   AppBar,
@@ -40,7 +41,9 @@ const Header = () => {
       }}
     >
       <Toolbar>
-        <Typography variant="h6">MovieLoversClub</Typography>
+        <Link href="/">
+          <Typography variant="h6">MovieLoversClub</Typography>
+        </Link>
         <Box sx={{ flexGrow: 1 }} />
         {auth.authData != "error" ? (
           <Box>

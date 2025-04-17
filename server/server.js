@@ -16,6 +16,7 @@ require("./models/movie");
 require("./models/User");
 require("./models/Blog");
 require("./models/Like");
+require("./models/Comment");
 
 // ==== IMPORT ROUTES ====
 // ---- COMMON ----`

@@ -9,7 +9,7 @@ const { requireLogin } = require("../../middleware/requireLogin");
 // ==== IMPORT MODELS ====
 const Blog = mongoose.model("blogposts");
 const Like = mongoose.model("likes");
-
+const Comment = mongoose.model("comments");
 const ROUTE_TYPE = "USER";
 
 module.exports = (app) => {
@@ -85,13 +85,23 @@ module.exports = (app) => {
           },
         },
         {
+          $lookup: {
+            from: "comments",
+            localField: "_id",
+            foreignField: "blog",
+            as: "comments",
+          },
+        },
+        {
           $addFields: {
             likesCount: { $size: "$likes" },
+            commentsCount: { $size: "$comments" },
           },
         },
         {
           $project: {
             likes: 0,
+            comments: 0,
           },
         },
         {
@@ -135,11 +145,19 @@ module.exports = (app) => {
     );
     try {
       const blog = await Blog.findById(req.params.id).select("");
+      const comments = await Comment.find({
+        blog: req.params.id,
+        status: "ACTIVE",
+      });
+
+      const likesCount = await Like.countDocuments({
+        blog: req.params.id,
+      });
 
       if (!blog) {
         return res.status(400).json(errorCodes.blog_not_found);
       }
-      return res.json(blog);
+      return res.json({ ...blog._doc, comments, likesCount });
     } catch (err) {
       console.log(
         `==== ${ROUTE_TYPE} GET BLOG POST BY ID ERROR ==== \n error:`,
@@ -195,6 +213,39 @@ module.exports = (app) => {
       return res.json(likes);
     } catch (err) {
       console.log(`==== ${ROUTE_TYPE} GET MY LIKES ERROR ==== \n error:`, err);
+      res.status(500).json(errorCodes.server_error);
+    }
+  });
+
+  // ==============================
+  // ==== COMMENT ON BLOG POST ====
+  // ==============================
+  app.post("/api/v1/user/comment/blog", requireLogin, async (req, res) => {
+    console.log(
+      `==== ${ROUTE_TYPE} COMMENT ON BLOG POST ==== \n body:`,
+      req.body
+    );
+    try {
+      const { blogId, content } = req.body;
+      const user = req.user;
+
+      const blog = await Blog.findById(blogId);
+      if (!blog) {
+        return res.status(400).json(errorCodes.blog_not_found);
+      }
+
+      const comment = await Comment.create({
+        content,
+        author: user._id,
+        blog: blogId,
+      });
+
+      res.json({ message: "Comment added successfully" });
+    } catch (err) {
+      console.log(
+        `==== ${ROUTE_TYPE} COMMENT ON BLOG POST ERROR ==== \n error:`,
+        err
+      );
       res.status(500).json(errorCodes.server_error);
     }
   });

@@ -18,6 +18,20 @@ export const getBlogPosts = async (values) => {
   }
 };
 
+export const getBlogPostById = async (id) => {
+  try {
+    const cookieData = await cookies.getAll();
+    const res = await axios.get(`/api/v1/user/get/blog/${id}`, {
+      headers: { Authorization: cookieData.userToken },
+    });
+    return res;
+  } catch (error) {
+    if (dev)
+      console.log("==== GET BLOG POST BY ID ERROR ==== \n error:", error);
+    return error.response;
+  }
+};
+
 export const likeBlogPost = async (values) => {
   try {
     const cookieData = await cookies.getAll();

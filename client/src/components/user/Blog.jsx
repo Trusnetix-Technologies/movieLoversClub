@@ -1,43 +1,37 @@
 import { useEffect, useState } from "react";
-import { Box, Typography, useTheme, Container } from "@mui/material";
+import { Box, Container, useTheme } from "@mui/material";
+import { useRouter } from "next/router";
 
 // ==== IMPORT COMPONENTS ====
-import AppBar from "./AppBar";
-import BlogPost from "./blog/BlogPost";
-import SearchBox from "./SearchBox";
+import AppBar from "@/components/user/AppBar";
+import BlogPost from "@/components/user/blog/BlogPost";
 
-// ==== IMPORT PROVIDERS ====
+// ==== IMPORT PROVIDER ====
 import { useDispatch, useSelector } from "react-redux";
-import { getBlogPosts } from "@/redux/actions/user/blogActions";
+import { getBlogPostById } from "@/redux/actions/user/blogActions";
 import { fetchMyLikes } from "@/redux/reducers/user/likesReducer";
-import {
-  fetchBlogPosts,
-  selectBlogPosts,
-} from "@/redux/reducers/user/blogPostReducer";
-
-const Home = () => {
+const Blog = () => {
   const theme = useTheme();
+  const router = useRouter();
+  const { id } = router.query;
   const dispatch = useDispatch();
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const values = {
-      page: 0,
-      pageSize: 10,
-    };
-    dispatch(fetchBlogPosts(values));
-    dispatch(fetchMyLikes());
-  }, []);
-
-  const fetchData = () => {
-    const values = {
-      page: 0,
-      pageSize: 10,
-    };
-    dispatch(fetchBlogPosts(values));
+  const fetchData = async () => {
+    setIsLoading(true);
+    const res = await getBlogPostById(id);
+    console.log("==== RES ==== \n res:", res);
+    if (res.status === 200) {
+      setData(res.data);
+      setIsLoading(false);
+    }
   };
 
-  const blogPosts = useSelector(selectBlogPosts);
-  console.log("==== BLOG POSTS DATA ==== \n blogPostsData:", blogPosts);
+  useEffect(() => {
+    dispatch(fetchMyLikes());
+    fetchData();
+  }, [id]);
 
   return (
     <Box
@@ -73,20 +67,6 @@ const Home = () => {
         }}
       >
         <AppBar />
-        <Box height={90} />
-        <Typography
-          variant="h1"
-          textAlign="center"
-          sx={{
-            color: "rgba(221, 253, 172, 1)",
-            whiteSpace: "pre-line",
-          }}
-          mb={5}
-        >
-          {"Explore, Discuss, and Discover\n the World of Movies"}
-        </Typography>
-        <SearchBox />
-
         <Box
           p={3}
           mt={5}
@@ -97,28 +77,17 @@ const Home = () => {
             boxShadow: "0px 4px 0px 0px rgba(7, 7, 7, 1)",
           }}
         >
-          {blogPosts.loading == "loaded" &&
-          blogPosts?.blogPosts?.length === 0 ? (
-            <Typography variant="h6" textAlign="center">
-              No posts found
-            </Typography>
+          {isLoading ? (
+            <div>Loading...</div>
           ) : (
-            <Typography variant="h4" fontWeight="bold" mb={2} mt={1}>
-              BLOG POSTS FOR YOU
-            </Typography>
+            <div>
+              <BlogPost post={data} fetchData={fetchData} />
+            </div>
           )}
-          {blogPosts?.blogPosts?.map((post) => (
-            <BlogPost
-              key={post._id}
-              post={post}
-              fetchData={fetchData}
-              showLess={true}
-            />
-          ))}
         </Box>
       </Container>
     </Box>
   );
 };
 
-export default Home;
+export default Blog;
