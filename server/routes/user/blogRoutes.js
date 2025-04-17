@@ -16,7 +16,7 @@ module.exports = (app) => {
   // ============================
   // ==== GET ALL BLOG POSTS ====
   // ============================
-  app.post("/api/v1/user/get/blog", requireLogin, async (req, res) => {
+  app.post("/api/v1/user/get/blog", async (req, res) => {
     console.log(`==== ${ROUTE_TYPE} GET BLOG POSTS ==== \n body:`, req.body);
     try {
       const limit = parseInt(req.body.pageSize);
@@ -145,7 +145,7 @@ module.exports = (app) => {
   // =============================
   // ==== GET BLOG POST BY ID ====
   // =============================
-  app.get("/api/v1/user/get/blog/:id", requireLogin, async (req, res) => {
+  app.get("/api/v1/user/get/blog/:id", async (req, res) => {
     console.log(
       `==== ${ROUTE_TYPE} GET BLOG POST BY ID ==== \n body:`,
       req.body

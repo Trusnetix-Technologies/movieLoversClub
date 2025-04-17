@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-
+import { useRouter } from "next/router";
 // ==== IMPORT MUI ====
 import { Box, Typography, useTheme, Container } from "@mui/material";
 
@@ -15,11 +15,12 @@ import {
   fetchBlogPosts,
   selectBlogPosts,
 } from "@/redux/reducers/user/blogPostReducer";
-
+import { selectAuthData } from "@/redux/reducers/authReducer";
 const Home = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
-
+  const router = useRouter();
+  const auth = useSelector(selectAuthData);
   /*
    * On component mount, fetch the blog posts and the my likes
    * fetchBlogPost requires page and pageSize as parameters
@@ -42,6 +43,15 @@ const Home = () => {
   };
 
   const blogPosts = useSelector(selectBlogPosts);
+
+  /*
+   * if user is logged in and not onboarded, redirect to onboarding page
+   */
+  useEffect(() => {
+    if (auth.loading == "loaded" && auth.authData.isOnboarded == false) {
+      router.push("/onboard");
+    }
+  }, [auth.loading]);
 
   return (
     <Box

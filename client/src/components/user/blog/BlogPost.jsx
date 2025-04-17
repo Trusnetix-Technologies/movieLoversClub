@@ -80,6 +80,8 @@ const BlogPost = ({ post, fetchData, showLess }) => {
     }
   };
 
+  const isLoggedIn = auth.loading == "loaded" && auth.authData != "error";
+
   return (
     <>
       <Paper
@@ -162,36 +164,38 @@ const BlogPost = ({ post, fetchData, showLess }) => {
           <Typography variant="h4" fontWeight="bold" mb={2} mt={1}>
             COMMENTS
           </Typography>
-          <Paper
-            sx={{
-              p: 2,
-              pb: 4,
-              borderRadius: 2,
-              border: "2px solid rgba(7, 7, 7, 1)",
-              borderRadius: "30px",
-              boxShadow: "0px 4px 0px 0px rgba(7, 7, 7, 1)",
-            }}
-          >
-            <Typography variant="h6" mb={2}>
-              Add a comment
-            </Typography>
-            {/* ==== COMMENT TEXT BOX ==== */}
-            <CommentTextBox
-              value={myComment}
-              setValue={setMyComment}
-              readOnly={false}
-            />
-            <Box display="flex" justifyContent="flex-end">
-              <PrimaryButton
-                variant="contained"
-                color="background.darkPaper"
-                sx={{ mt: 2 }}
-                onClick={handleAddComment}
-              >
-                Add Comment
-              </PrimaryButton>
-            </Box>
-          </Paper>
+          {isLoggedIn && (
+            <Paper
+              sx={{
+                p: 2,
+                pb: 4,
+                borderRadius: 2,
+                border: "2px solid rgba(7, 7, 7, 1)",
+                borderRadius: "30px",
+                boxShadow: "0px 4px 0px 0px rgba(7, 7, 7, 1)",
+              }}
+            >
+              <Typography variant="h6" mb={2}>
+                Add a comment
+              </Typography>
+              {/* ==== COMMENT TEXT BOX ==== */}
+              <CommentTextBox
+                value={myComment}
+                setValue={setMyComment}
+                readOnly={false}
+              />
+              <Box display="flex" justifyContent="flex-end">
+                <PrimaryButton
+                  variant="contained"
+                  color="background.darkPaper"
+                  sx={{ mt: 2 }}
+                  onClick={handleAddComment}
+                >
+                  Add Comment
+                </PrimaryButton>
+              </Box>
+            </Paper>
+          )}
           <Divider sx={{ mt: 2 }} />
           {post.comments.map((comment, i) => (
             <Comment

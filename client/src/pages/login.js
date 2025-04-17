@@ -22,10 +22,10 @@ export default function LoginPage() {
   useEffect(() => {
     if (auth.loading == "loaded") {
       if (auth.authData.role == "ADMIN") {
-        router.push("/admin");
+        router.push("/admin"); // redirect to admin page
       } else {
         if (auth.authData.role == "USER") {
-          router.push("/");
+          router.push("/"); // redirect to home page
         }
       }
     }
