@@ -46,11 +46,7 @@ const Home = () => {
       <Box height={90} />
       <Box p={2}>
         {blogPosts?.blogPosts?.map((post) => (
-          <BlogPost
-            key={post._id}
-            post={post}
-            fetchBlogPosts={fetchBlogPosts}
-          />
+          <BlogPost key={post._id} post={post} />
         ))}
       </Box>
     </Box>

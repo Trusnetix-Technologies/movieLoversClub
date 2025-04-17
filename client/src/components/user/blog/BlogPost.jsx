@@ -12,7 +12,7 @@ import {
   fetchBlogPosts,
   selectBlogPosts,
 } from "@/redux/reducers/user/blogPostReducer";
-const BlogPost = ({ post, fetchBlogPosts }) => {
+const BlogPost = ({ post }) => {
   const dispatch = useDispatch();
   const likes = useSelector(selectLikes);
 

@@ -31,7 +31,7 @@ const Header = () => {
       <Toolbar>
         <Typography variant="h6">MovieLoversClub</Typography>
         <Box sx={{ flexGrow: 1 }} />
-        {auth.authData ? (
+        {auth.authData != "error" ? (
           <Box>
             <Avatar
               onClick={(event) => setAnchorEl(event.currentTarget)}
