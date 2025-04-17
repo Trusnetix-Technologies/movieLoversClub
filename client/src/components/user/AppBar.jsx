@@ -14,8 +14,9 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCurrentUser, selectAuthData } from "@/redux/reducers/authReducer";
 import { logout } from "@/redux/actions/authActions";
-
+import { useRouter } from "next/router";
 const Header = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const auth = useSelector(selectAuthData);
   const [anchorEl, setAnchorEl] = useState(null);
