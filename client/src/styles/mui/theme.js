@@ -4,7 +4,7 @@ import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 const textColorLight = "#222a5c";
 const textColorDark = "#fff";
 
-const primaryColor = "#6278E8";
+const primaryColor = "#08351D";
 
 const darkMenuColor = "#1C1A33";
 
@@ -20,7 +20,7 @@ let lightTheme = createTheme({
       default: "#fff",
       paper: "rgba(245, 252, 229, 1)",
       contrastText: "#000",
-      darkPaper: "#88888888",
+      darkPaper: "#08351D",
       white: "#ffffff",
     },
     divider: "#E9E9E9",

@@ -148,7 +148,9 @@ module.exports = (app) => {
       const comments = await Comment.find({
         blog: req.params.id,
         status: "ACTIVE",
-      });
+      })
+        .populate("author")
+        .sort({ createdAt: -1 });
 
       const likesCount = await Like.countDocuments({
         blog: req.params.id,
@@ -220,11 +222,8 @@ module.exports = (app) => {
   // ==============================
   // ==== COMMENT ON BLOG POST ====
   // ==============================
-  app.post("/api/v1/user/comment/blog", requireLogin, async (req, res) => {
-    console.log(
-      `==== ${ROUTE_TYPE} COMMENT ON BLOG POST ==== \n body:`,
-      req.body
-    );
+  app.post("/api/v1/user/add/comment", requireLogin, async (req, res) => {
+    console.log(`==== ${ROUTE_TYPE} ADD COMMENT ==== \n body:`, req.body);
     try {
       const { blogId, content } = req.body;
       const user = req.user;
@@ -236,7 +235,7 @@ module.exports = (app) => {
 
       const comment = await Comment.create({
         content,
-        author: user._id,
+        author: user.id,
         blog: blogId,
       });
 
@@ -249,4 +248,33 @@ module.exports = (app) => {
       res.status(500).json(errorCodes.server_error);
     }
   });
+
+  // ========================
+  // ==== DELETE COMMENT ====
+  // ========================
+  app.delete(
+    "/api/v1/user/delete/comment/:id",
+    requireLogin,
+    async (req, res) => {
+      console.log(`==== ${ROUTE_TYPE} DELETE COMMENT ==== \n body:`, req.body);
+      try {
+        const { id } = req.params;
+        const user = req.user;
+
+        const comment = await Comment.findById(id);
+        if (!comment) {
+          return res.status(400).json(errorCodes.comment_not_found);
+        }
+
+        await Comment.updateOne({ _id: id }, { $set: { status: "DELETED" } });
+        return res.json({ message: "Comment deleted successfully" });
+      } catch (err) {
+        console.log(
+          `==== ${ROUTE_TYPE} DELETE COMMENT ERROR ==== \n error:`,
+          err
+        );
+        res.status(500).json(errorCodes.server_error);
+      }
+    }
+  );
 };

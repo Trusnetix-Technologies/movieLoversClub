@@ -31,6 +31,10 @@ const errorCodes = {
     code: 400,
     message: "Blog post not found",
   },
+  comment_not_found: {
+    code: 400,
+    message: "Comment not found",
+  },
 };
 
 module.exports = errorCodes;

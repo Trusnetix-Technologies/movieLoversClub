@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import { useState } from "react";
+import "react-quill/dist/quill.snow.css";
 
 // ==== IMPORT THEME PROVIDERS ====
 import { ThemeProvider } from "@mui/material/styles";
