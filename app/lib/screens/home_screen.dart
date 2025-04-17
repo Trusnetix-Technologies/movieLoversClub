@@ -34,10 +34,12 @@ class _HomeScreenState extends State<HomeScreen> {
     final isLoading = Provider.of<Blog>(context, listen: true).isLoading;
     return Scaffold(
       appBar: AppBar(
-        title: Text("MovieLoversClub",
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).primaryColor,
-                )),
+        title: Text(
+          "MovieLoversClub",
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).primaryColor,
+              ),
+        ),
         centerTitle: true,
         backgroundColor: Theme.of(context).cardColor,
       ),

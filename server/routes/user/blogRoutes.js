@@ -149,13 +149,16 @@ module.exports = (app) => {
       const user = req.user;
 
       const blog = await Blog.findById(blogId);
+      console.log("==== BLOG ==== \n blog:", blog);
       if (!blog) {
         return res.status(400).json(errorCodes.blog_not_found);
       }
 
       const like = await Like.findOne({ user: user._id, blog: blogId });
+      console.log("==== LIKE ==== \n like:", like);
       if (like) {
         await Like.deleteOne({ _id: like._id });
+        console.log("==== LIKE DELETED ==== \n like:", like);
         return res.json({ message: "Blog post unliked successfully" });
       }
 

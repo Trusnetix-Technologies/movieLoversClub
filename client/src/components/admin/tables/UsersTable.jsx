@@ -7,7 +7,10 @@ import moment from "moment";
 import AlertDialog from "@/components/common/AlertDialog";
 import { useRouter } from "next/router";
 // ==== IMPORT ACTIONS ====
-import { getUsers, deleteMultipleUsers } from "@/redux/actions/userActions";
+import {
+  getUsers,
+  deleteMultipleUsers,
+} from "@/redux/actions/admin/userActions";
 import StoreHooks from "@/redux/contextProvider/storeHooks";
 
 const UsersTable = () => {

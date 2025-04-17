@@ -23,7 +23,7 @@ import {
   getBlogPostById,
   updateBlogPost,
   addBlogPost,
-} from "@/redux/actions/blogActions";
+} from "@/redux/actions/admin/blogActions";
 
 const BlogForm = () => {
   const router = useRouter();

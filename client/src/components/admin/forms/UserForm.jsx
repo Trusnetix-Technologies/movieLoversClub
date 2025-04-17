@@ -18,7 +18,7 @@ import {
 import StoreHooks from "@/redux/contextProvider/storeHooks";
 
 // ==== IMPORT ACTIONS ====
-import { getUserById, updateUser } from "@/redux/actions/userActions";
+import { getUserById, updateUser } from "@/redux/actions/admin/userActions";
 import Loading from "@/components/common/Loading";
 
 const UserForm = () => {

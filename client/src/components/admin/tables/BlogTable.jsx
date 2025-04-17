@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import {
   getBlogPosts,
   deleteMultipleBlogPosts,
-} from "@/redux/actions/blogActions";
+} from "@/redux/actions/admin/blogActions";
 import StoreHooks from "@/redux/contextProvider/storeHooks";
 
 const BlogTable = () => {

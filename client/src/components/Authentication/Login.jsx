@@ -61,7 +61,7 @@ const Login = () => {
           {/* ==== IMAGE CONTAINER ==== */}
           <Box
             component="img"
-            src="https://s3-alpha-sig.figma.com/img/ace0/7d3d/47ebb2b16c3112f80b17c7a756e7c77d?Expires=1744588800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=ZwN78RxGUPtVFYEpVq8SaysKJGJJW7QVKz1tJrHZKw~vGb4PuWql6zPezJCBTiezO6juKKJClBNCcAg29T4SEe~a0ouZ0Hl6NVM3mIHKK56EgyyIzzDJbpUJ99SuQtZwdewyG34ms86a~zL15isPNVM22w3KguMpx7d8CvU3ReaA-ehyZ3BPXsMjiLW2xL-A81oQ9OYK92k-gY3kwFObOkhQB-FVYXoJB2xMh5b1dxbC2wQGjY34HJevoMMtthKP2AUxVhg4drfFgDFZKyou4a-IrjERXC2axnqtBGkL9BACTxQJuS4sLChZcl~ozXXLEQnzdZzUSOA59J5Vsryd8w__"
+            src="/images/login.gif"
             alt="login-image"
             width="100%"
           />
