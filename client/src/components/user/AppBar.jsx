@@ -8,6 +8,8 @@ import {
   Avatar,
   Menu,
   MenuItem,
+  Container,
+  useTheme,
 } from "@mui/material";
 
 // ==== IMPORT PROVIDER ====
@@ -16,6 +18,7 @@ import { fetchCurrentUser, selectAuthData } from "@/redux/reducers/authReducer";
 import { logout } from "@/redux/actions/authActions";
 import { useRouter } from "next/router";
 const Header = () => {
+  const theme = useTheme();
   const router = useRouter();
   const dispatch = useDispatch();
   const auth = useSelector(selectAuthData);
@@ -28,7 +31,14 @@ const Header = () => {
   }, [dispatch]);
 
   return (
-    <AppBar>
+    <Box
+      sx={{
+        backgroundColor: theme.palette.background.paper,
+        margin: "0 auto",
+        borderRadius: "46px",
+        boxShadow: "0px 4px 0px 0px #070707",
+      }}
+    >
       <Toolbar>
         <Typography variant="h6">MovieLoversClub</Typography>
         <Box sx={{ flexGrow: 1 }} />
@@ -65,7 +75,7 @@ const Header = () => {
           </Button>
         )}
       </Toolbar>
-    </AppBar>
+    </Box>
   );
 };
 

@@ -18,7 +18,7 @@ let lightTheme = createTheme({
     background: {
       menu: "#F5FAFA",
       default: "#fff",
-      paper: "#E1E5F9",
+      paper: "rgba(245, 252, 229, 1)",
       contrastText: "#000",
       darkPaper: "#88888888",
       white: "#ffffff",

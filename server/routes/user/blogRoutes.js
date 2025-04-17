@@ -33,7 +33,15 @@ module.exports = (app) => {
       };
 
       if (search) {
-        query[searchBy] = { $regex: search, $options: "i" };
+        query = {
+          ...query,
+          $or: [
+            { title: { $regex: search.trim(), $options: "i" } },
+            { description: { $regex: search.trim(), $options: "i" } },
+            { content: { $regex: search.trim(), $options: "i" } },
+            { movie: { $regex: search.trim(), $options: "i" } },
+          ],
+        };
       }
 
       if (filter) {
@@ -49,6 +57,8 @@ module.exports = (app) => {
       }
 
       const sortBy = orderBy ? { [orderBy]: orderDirection } : { name: -1 };
+
+      console.log("==== QUERY ==== \n query:", query);
 
       const blogs = await Blog.aggregate([
         { $match: query },

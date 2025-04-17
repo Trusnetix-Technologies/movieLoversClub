@@ -1,6 +1,6 @@
 import moment from "moment";
 import Iconify from "@/components/common/Iconify";
-import { Box, Avatar, Paper, Typography } from "@mui/material";
+import { Box, Avatar, Paper, Typography, useTheme } from "@mui/material";
 
 import IconButton from "@mui/material/IconButton";
 
@@ -13,6 +13,7 @@ import {
   selectBlogPosts,
 } from "@/redux/reducers/user/blogPostReducer";
 const BlogPost = ({ post }) => {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const likes = useSelector(selectLikes);
 
@@ -38,6 +39,9 @@ const BlogPost = ({ post }) => {
       sx={{
         p: 2,
         borderRadius: 2,
+        border: "2px solid rgba(7, 7, 7, 1)",
+        borderRadius: "30px",
+        boxShadow: "0px 4px 0px 0px rgba(7, 7, 7, 1)",
       }}
     >
       <Box display="flex" justifyContent="space-between" mb={2}>
@@ -58,6 +62,11 @@ const BlogPost = ({ post }) => {
                 ? "material-symbols:favorite"
                 : "material-symbols:favorite-outline"
             }
+            sx={{
+              color: likes.likes.find((like) => like.blog === post._id)
+                ? theme.palette.error.main
+                : theme.palette.text.primary,
+            }}
           />
         </IconButton>
         <Typography variant="body1">{post.likesCount ?? 0}</Typography>
