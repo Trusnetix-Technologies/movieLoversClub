@@ -1,20 +1,23 @@
 import moment from "moment";
 import Link from "next/link";
-import { useState, useContext } from "react";
 import { useRouter } from "next/router";
+import { useState, useContext } from "react";
+
+// ==== COMPONENTS ====
 import Iconify from "@/components/common/Iconify";
 import {
   Box,
   Avatar,
   Paper,
   Typography,
-  Button,
   useTheme,
   Divider,
 } from "@mui/material";
-import CommentTextBox from "./CommentTextBox";
-import { PrimaryButton } from "@/styles/mui/themeComponents";
 import IconButton from "@mui/material/IconButton";
+import CommentTextBox from "./CommentTextBox";
+
+// ==== CUSTOM COMPONENTS ====
+import { PrimaryButton } from "@/styles/mui/themeComponents";
 
 // ==== IMPORT PROVIDERS ====
 import { useDispatch, useSelector } from "react-redux";
@@ -23,16 +26,28 @@ import { likeBlogPost, addComment } from "@/redux/actions/user/blogActions";
 import StoreHooks from "@/redux/contextProvider/storeHooks";
 import Comment from "./Comment";
 import { selectAuthData } from "@/redux/reducers/authReducer";
+
+/*
+ * Post, fetchData, showLess are props passed from the parent component
+ */
 const BlogPost = ({ post, fetchData, showLess }) => {
   const theme = useTheme();
   const router = useRouter();
   const dispatch = useDispatch();
-  const likes = useSelector(selectLikes);
   const storeHooks = useContext(StoreHooks);
+
+  // ===+ SELECTORS ====
+  const likes = useSelector(selectLikes);
   const auth = useSelector(selectAuthData);
 
+  // ==== STATE ====
   const [myComment, setMyComment] = useState(""); // to write new comment
 
+  /*
+   * handleLike is used to like a blog post
+   * It takes the blog id from the post and passes it to the likeBlogPost action
+   * If the like is successful, it fetches the my likes and the blog posts
+   */
   const handleLike = async () => {
     const values = {
       blogId: post._id,
@@ -44,8 +59,15 @@ const BlogPost = ({ post, fetchData, showLess }) => {
     }
   };
 
+  /*
+   * maxLength is the maximum length of the blog post content
+   * It is used to show the read more button
+   */
   const maxLength = 600;
 
+  /*
+   * handleAddComment is used to add a comment to a blog post
+   */
   const handleAddComment = async () => {
     const values = {
       blogId: post._id,
@@ -58,7 +80,6 @@ const BlogPost = ({ post, fetchData, showLess }) => {
     }
   };
 
-  console.log("auth", auth);
   return (
     <>
       <Paper
@@ -128,7 +149,16 @@ const BlogPost = ({ post, fetchData, showLess }) => {
         </Box>
       </Paper>
       {!showLess && (
-        <Box mt={5}>
+        <Box
+          p={3}
+          mt={2}
+          sx={{
+            background: "rgba(239, 238, 187, 1)",
+            borderRadius: "42px",
+            border: "2px solid rgba(7, 7, 7, 1)",
+            boxShadow: "0px 4px 0px 0px rgba(7, 7, 7, 1)",
+          }}
+        >
           <Typography variant="h4" fontWeight="bold" mb={2} mt={1}>
             COMMENTS
           </Typography>
@@ -145,6 +175,7 @@ const BlogPost = ({ post, fetchData, showLess }) => {
             <Typography variant="h6" mb={2}>
               Add a comment
             </Typography>
+            {/* ==== COMMENT TEXT BOX ==== */}
             <CommentTextBox
               value={myComment}
               setValue={setMyComment}

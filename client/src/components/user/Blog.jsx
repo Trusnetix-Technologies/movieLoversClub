@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { Box, Container, useTheme } from "@mui/material";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { Box, CircularProgress, Container, useTheme } from "@mui/material";
 
 // ==== IMPORT COMPONENTS ====
 import AppBar from "@/components/user/AppBar";
@@ -10,14 +10,26 @@ import BlogPost from "@/components/user/blog/BlogPost";
 import { useDispatch, useSelector } from "react-redux";
 import { getBlogPostById } from "@/redux/actions/user/blogActions";
 import { fetchMyLikes } from "@/redux/reducers/user/likesReducer";
+
 const Blog = () => {
   const theme = useTheme();
   const router = useRouter();
-  const { id } = router.query;
   const dispatch = useDispatch();
+
+  // ==== QUERY PARAMS ====
+  const { id } = router.query;
+
+  // ==== STATE ====
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  /*
+   * Fetch the individual blog post using the id provided in the url
+   * Extracted the id from the url using router.query
+   * Passed the id to the getBlogPostById action
+   * Set the data to the state
+   * Set the isLoading to false
+   */
   const fetchData = async () => {
     setIsLoading(true);
     const res = await getBlogPostById(id);
@@ -28,6 +40,9 @@ const Blog = () => {
     }
   };
 
+  /*
+   * On component mount, fetch the my likes
+   */
   useEffect(() => {
     dispatch(fetchMyLikes());
     fetchData();
@@ -67,24 +82,24 @@ const Blog = () => {
         }}
       >
         <AppBar />
-        <Box
-          p={3}
-          mt={5}
-          sx={{
-            background: "rgba(239, 238, 187, 1)",
-            borderRadius: "42px",
-            border: "2px solid rgba(7, 7, 7, 1)",
-            boxShadow: "0px 4px 0px 0px rgba(7, 7, 7, 1)",
-          }}
-        >
-          {isLoading ? (
-            <div>Loading...</div>
-          ) : (
-            <div>
-              <BlogPost post={data} fetchData={fetchData} />
-            </div>
-          )}
-        </Box>
+
+        {isLoading ? (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{
+              minHeight: "100vh",
+              width: "100%",
+            }}
+          >
+            <CircularProgress color="secondary" />
+          </Box>
+        ) : (
+          <Box mt={6}>
+            <BlogPost post={data} fetchData={fetchData} />
+          </Box>
+        )}
       </Container>
     </Box>
   );

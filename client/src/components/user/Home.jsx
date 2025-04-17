@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+
+// ==== IMPORT MUI ====
 import { Box, Typography, useTheme, Container } from "@mui/material";
 
 // ==== IMPORT COMPONENTS ====
 import AppBar from "./AppBar";
-import BlogPost from "./blog/BlogPost";
 import SearchBox from "./SearchBox";
+import BlogPost from "./blog/BlogPost";
 
 // ==== IMPORT PROVIDERS ====
 import { useDispatch, useSelector } from "react-redux";
-import { getBlogPosts } from "@/redux/actions/user/blogActions";
 import { fetchMyLikes } from "@/redux/reducers/user/likesReducer";
 import {
   fetchBlogPosts,
@@ -19,6 +20,10 @@ const Home = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
 
+  /*
+   * On component mount, fetch the blog posts and the my likes
+   * fetchBlogPost requires page and pageSize as parameters
+   */
   useEffect(() => {
     const values = {
       page: 0,
@@ -37,18 +42,17 @@ const Home = () => {
   };
 
   const blogPosts = useSelector(selectBlogPosts);
-  console.log("==== BLOG POSTS DATA ==== \n blogPostsData:", blogPosts);
 
   return (
     <Box
       sx={{
+        // setting the background noise image and background color
         backgroundSize: "cover",
         backgroundPosition: "center",
         minHeight: "100vh",
         background: "#08351D",
         position: "relative",
 
-        // background: `linear-gradient(180deg, ${theme.palette.background.default} 0%, ${theme.palette.background.paper} 50%, ${theme.palette.background.default} 100%)`,
         "&::before": {
           content: '""',
           position: "absolute",
@@ -67,12 +71,17 @@ const Home = () => {
     >
       <Container
         sx={{
+          // by default, the container maxWidth is lg
+          // and it will appear in the center of the page
           position: "relative",
           pt: 2,
           zIndex: 10,
         }}
       >
+        {/* ==== APP BAR ==== */}
         <AppBar />
+
+        {/* ==== HEADER ==== */}
         <Box height={90} />
         <Typography
           variant="h1"
@@ -85,8 +94,11 @@ const Home = () => {
         >
           {"Explore, Discuss, and Discover\n the World of Movies"}
         </Typography>
+
+        {/* ==== SEARCH BOX ==== */}
         <SearchBox />
 
+        {/* ==== BLOG POSTS ==== */}
         <Box
           p={3}
           mt={5}
@@ -107,6 +119,8 @@ const Home = () => {
               BLOG POSTS FOR YOU
             </Typography>
           )}
+
+          {/* ==== BLOG POSTS ==== */}
           {blogPosts?.blogPosts?.map((post) => (
             <BlogPost
               key={post._id}
