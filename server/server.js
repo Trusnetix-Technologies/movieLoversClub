@@ -15,6 +15,7 @@ mongoose.connect(process.env.MONGO_URI, {}).then(() => {
 require("./models/movie");
 require("./models/User");
 require("./models/Blog");
+require("./models/Like");
 
 // ==== IMPORT ROUTES ====
 // ---- COMMON ----`

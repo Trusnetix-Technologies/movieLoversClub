@@ -13,6 +13,7 @@ class BlogModel {
   final String movie;
   final String director;
   final String status;
+  final int likesCount;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -23,6 +24,7 @@ class BlogModel {
     this.description,
     required this.movie,
     required this.director,
+    required this.likesCount,
     required this.status,
     required this.createdAt,
     required this.updatedAt,
@@ -61,21 +63,24 @@ class Blog extends ChangeNotifier {
         final Map<String, dynamic> data = jsonDecode(response.body);
         debugPrint("data: $data");
         _blogs = data['data']
-            .map<BlogModel>((blog) => BlogModel(
-                  id: blog['_id'],
-                  title: blog['title'],
-                  content: blog['content'],
-                  description: blog['description'],
-                  movie: blog['movie'],
-                  director: blog['director'],
-                  status: blog['status'],
-                  createdAt: blog['createdAt'] != null
-                      ? DateTime.parse(blog['createdAt'])
-                      : DateTime.now(),
-                  updatedAt: blog['updatedAt'] != null
-                      ? DateTime.parse(blog['updatedAt'])
-                      : DateTime.now(),
-                ))
+            .map<BlogModel>(
+              (blog) => BlogModel(
+                id: blog['_id'],
+                title: blog['title'],
+                content: blog['content'],
+                description: blog['description'],
+                movie: blog['movie'],
+                director: blog['director'],
+                status: blog['status'],
+                likesCount: int.parse(blog['likesCount'] ?? "0"),
+                createdAt: blog['createdAt'] != null
+                    ? DateTime.parse(blog['createdAt'])
+                    : DateTime.now(),
+                updatedAt: blog['updatedAt'] != null
+                    ? DateTime.parse(blog['updatedAt'])
+                    : DateTime.now(),
+              ),
+            )
             .toList();
         _isLoading = false;
         notifyListeners();

@@ -8,6 +8,7 @@ const { requireLogin } = require("../../middleware/requireLogin");
 
 // ==== IMPORT MODELS ====
 const Blog = mongoose.model("blogposts");
+const Like = mongoose.model("likes");
 
 const ROUTE_TYPE = "USER";
 
@@ -47,15 +48,64 @@ module.exports = (app) => {
         }
       }
 
-      const sortBy = orderBy ? { [orderBy]: orderDirection } : { name: "desc" };
+      const sortBy = orderBy ? { [orderBy]: orderDirection } : { name: -1 };
 
-      const blogs = await Blog.find(query, select)
-        .sort(sortBy)
-        .skip(skip)
-        .limit(limit);
+      const blogs = await Blog.aggregate([
+        { $match: query },
+        {
+          $lookup: {
+            from: "users",
+            localField: "author",
+            foreignField: "_id",
+            as: "author",
+          },
+        },
+        {
+          $unwind: {
+            path: "$author",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $lookup: {
+            from: "likes",
+            localField: "_id",
+            foreignField: "blog",
+            as: "likes",
+          },
+        },
+        {
+          $addFields: {
+            likesCount: { $size: "$likes" },
+          },
+        },
+        {
+          $project: {
+            likes: 0,
+          },
+        },
+        {
+          $facet: {
+            totalCount: [{ $count: "total" }],
+            data: [
+              { $sort: sortBy },
+              { $skip: parseInt(skip) * limit },
+              { $limit: parseInt(limit) },
+            ],
+          },
+        },
+        {
+          $unwind: "$totalCount",
+        },
+        {
+          $addFields: {
+            totalCount: "$totalCount.total",
+            page: skip,
+          },
+        },
+      ]);
 
-      const totalCount = await Blog.countDocuments(query);
-      res.json({ data: blogs, total: totalCount, page: skip });
+      res.json(blogs[0] ?? { data: [], total: 0, page: skip });
     } catch (err) {
       console.log(
         `==== ${ROUTE_TYPE} GET BLOG POSTS ERROR ==== \n error:`,
@@ -85,6 +135,53 @@ module.exports = (app) => {
         `==== ${ROUTE_TYPE} GET BLOG POST BY ID ERROR ==== \n error:`,
         err
       );
+      res.status(500).json(errorCodes.server_error);
+    }
+  });
+
+  // ========================
+  // ==== LIKE BLOG POST ====
+  // ========================
+  app.post("/api/v1/user/like/blog", requireLogin, async (req, res) => {
+    console.log(`==== ${ROUTE_TYPE} LIKE BLOG POST ==== \n body:`, req.body);
+    try {
+      const { blogId } = req.body;
+      const user = req.user;
+
+      const blog = await Blog.findById(blogId);
+      if (!blog) {
+        return res.status(400).json(errorCodes.blog_not_found);
+      }
+
+      const like = await Like.findOne({ user: user._id, blog: blogId });
+      if (like) {
+        await Like.deleteOne({ _id: like._id });
+        return res.json({ message: "Blog post unliked successfully" });
+      }
+
+      const newLike = new Like({ user: user._id, blog: blogId });
+      await newLike.save();
+      res.json({ message: "Blog post liked successfully" });
+    } catch (err) {
+      console.log(
+        `==== ${ROUTE_TYPE} LIKE BLOG POST ERROR ==== \n error:`,
+        err
+      );
+      res.status(500).json(errorCodes.server_error);
+    }
+  });
+
+  // ======================
+  // ==== GET MY LIKES ====
+  // ======================
+  app.get("/api/v1/user/get/my/likes", requireLogin, async (req, res) => {
+    console.log(`==== ${ROUTE_TYPE} GET MY LIKES ==== \n body:`, req.body);
+    try {
+      const userID = req.user._id;
+      const likes = await Like.find({ user: userID });
+      return res.json(likes);
+    } catch (err) {
+      console.log(`==== ${ROUTE_TYPE} GET MY LIKES ERROR ==== \n error:`, err);
       res.status(500).json(errorCodes.server_error);
     }
   });

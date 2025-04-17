@@ -161,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Icon(Icons.favorite),
                             const SizedBox(width: 4),
-                            Text("100"),
+                            Text(blogs[index].likesCount.toString() ?? "0"),
                           ],
                         ),
                       ],
