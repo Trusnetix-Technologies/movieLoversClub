@@ -17,6 +17,7 @@ require("./models/User");
 require("./models/Blog");
 require("./models/Like");
 require("./models/Comment");
+require("./models/Payment");
 
 // ==== IMPORT ROUTES ====
 // ---- COMMON ----`
@@ -27,6 +28,7 @@ require("./routes/admin/userRoutes")(app);
 require("./routes/admin/blogRoutes")(app);
 // ---- USER ----
 require("./routes/user/blogRoutes")(app);
+require("./routes/user/paymentRoutes")(app);
 
 // Start the server
 app.listen(process.env.PORT, () => {

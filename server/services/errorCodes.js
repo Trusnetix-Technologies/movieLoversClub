@@ -35,6 +35,14 @@ const errorCodes = {
     code: 400,
     message: "Comment not found",
   },
+  payment_not_found: {
+    code: 400,
+    message: "Payment not found",
+  },
+  payment_verification_failed: {
+    code: 400,
+    message: "Payment verification failed",
+  },
 };
 
 module.exports = errorCodes;

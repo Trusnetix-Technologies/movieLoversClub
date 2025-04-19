@@ -11,7 +11,7 @@ const ReactQuill = dynamic(
     ssr: false,
   }
 );
-const CommentTextBox = ({ value, setValue, readOnly }) => {
+const RichTextBox = ({ value, setValue, readOnly }) => {
   const editorRef = useRef(null);
 
   return (
@@ -25,4 +25,4 @@ const CommentTextBox = ({ value, setValue, readOnly }) => {
   );
 };
 
-export default CommentTextBox;
+export default RichTextBox;

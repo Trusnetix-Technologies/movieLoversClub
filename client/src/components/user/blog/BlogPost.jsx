@@ -12,11 +12,13 @@ import {
   Typography,
   useTheme,
   Divider,
+  Button,
 } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import CommentTextBox from "./CommentTextBox";
 
-// ==== CUSTOM COMPONENTS ====
+// ==== COMPONENTS ====
+import IconButton from "@mui/material/IconButton";
+import RichTextBox from "../../common/RichTextBox";
+import PaymentDialog from "../payment/PaymentDialog";
 import { PrimaryButton } from "@/styles/mui/themeComponents";
 
 // ==== IMPORT PROVIDERS ====
@@ -24,7 +26,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchMyLikes, selectLikes } from "@/redux/reducers/user/likesReducer";
 import { likeBlogPost, addComment } from "@/redux/actions/user/blogActions";
 import StoreHooks from "@/redux/contextProvider/storeHooks";
-import Comment from "./Comment";
 import { selectAuthData } from "@/redux/reducers/authReducer";
 
 /*
@@ -81,6 +82,20 @@ const BlogPost = ({ post, fetchData, showLess }) => {
   };
 
   const isLoggedIn = auth.loading == "loaded" && auth.authData != "error";
+  const isProUser = auth.loading == "loaded" && auth.authData.plan == "PRO";
+
+  /*
+   * Payment dialog
+   */
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+
+  const handlePaymentDialogOpen = () => {
+    setPaymentDialogOpen(true);
+  };
+
+  const handlePaymentDialogClose = () => {
+    setPaymentDialogOpen(false);
+  };
 
   return (
     <>
@@ -173,32 +188,84 @@ const BlogPost = ({ post, fetchData, showLess }) => {
                 border: "2px solid rgba(7, 7, 7, 1)",
                 borderRadius: "30px",
                 boxShadow: "0px 4px 0px 0px rgba(7, 7, 7, 1)",
+                position: "relative",
               }}
             >
-              <Typography variant="h6" mb={2}>
-                Add a comment
-              </Typography>
-              {/* ==== COMMENT TEXT BOX ==== */}
-              <CommentTextBox
-                value={myComment}
-                setValue={setMyComment}
-                readOnly={false}
-              />
-              <Box display="flex" justifyContent="flex-end">
-                <PrimaryButton
-                  variant="contained"
-                  color="background.darkPaper"
-                  sx={{ mt: 2 }}
-                  onClick={handleAddComment}
-                >
-                  Add Comment
-                </PrimaryButton>
+              <Box
+                position="relative"
+                sx={{
+                  "&::before": !isProUser && {
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: "rgba(255, 255, 255, 0.01)",
+                    zIndex: 1,
+                    backdropFilter: "blur(1px)",
+                  },
+                }}
+              >
+                <Typography variant="h6" mb={2}>
+                  Add a comment
+                </Typography>
+                {/* ==== COMMENT TEXT BOX ==== */}
+                <RichTextBox
+                  value={myComment}
+                  setValue={setMyComment}
+                  readOnly={false}
+                />
+                <Box display="flex" justifyContent="flex-end">
+                  <PrimaryButton
+                    variant="contained"
+                    color="background.darkPaper"
+                    sx={{ mt: 2 }}
+                    onClick={handleAddComment}
+                  >
+                    Add Comment
+                  </PrimaryButton>
+                </Box>
               </Box>
+              {!isProUser && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    zIndex: 2,
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                >
+                  <Button
+                    size="large"
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "rgba(255, 0, 0, 1)",
+                      color: theme.palette.primary.contrastText,
+                      borderRadius: "20px",
+
+                      "&:hover": {
+                        backgroundColor: "rgba(255, 0, 0, 1)",
+                      },
+                    }}
+                    onClick={handlePaymentDialogOpen}
+                  >
+                    Become Pro Member to Publish
+                  </Button>
+                </Box>
+              )}
             </Paper>
           )}
+          {/* ==== PAYMENT DIALOG ==== */}
+          <PaymentDialog
+            open={paymentDialogOpen}
+            onClose={handlePaymentDialogClose}
+          />
+
           <Divider sx={{ mt: 2 }} />
           {post.comments.map((comment, i) => (
-            <Comment
+            <RichTextBox
               key={comment._id}
               comment={comment}
               isMyComment={comment.author._id == auth.authData._id}

@@ -1,6 +1,6 @@
 import moment from "moment";
 import { useState, useContext } from "react";
-import CommentTextBox from "./CommentTextBox";
+import CommentTextBox from "../../common/RichTextBox";
 import { Paper, Box, Avatar, Typography, IconButton } from "@mui/material";
 import Iconify from "@/components/common/Iconify";
 
