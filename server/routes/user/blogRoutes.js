@@ -56,7 +56,9 @@ module.exports = (app) => {
         }
       }
 
-      const sortBy = orderBy ? { [orderBy]: orderDirection } : { name: -1 };
+      const sortBy = orderBy
+        ? { [orderBy]: orderDirection }
+        : { createdAt: -1 };
 
       console.log("==== QUERY ==== \n query:", query);
 
@@ -289,4 +291,40 @@ module.exports = (app) => {
       }
     }
   );
+  // =======================
+  // ==== ADD BLOG POST ====
+  // =======================
+  app.post("/api/v1/user/add/blog", requireLogin, async (req, res) => {
+    console.log(`==== ${ROUTE_TYPE} ADD BLOG POST ==== \n body:`, req.body);
+    try {
+      const {
+        title,
+        description,
+        content,
+        movie,
+        director,
+        image,
+        genre,
+        rating,
+      } = req.body;
+      const user = req.user;
+
+      const blog = await Blog.create({
+        title,
+        content,
+        description,
+        movie,
+        director,
+        image,
+        genre,
+        rating,
+        author: user.id,
+      });
+
+      return res.json({ message: "Blog post added successfully", blog });
+    } catch (err) {
+      console.log(`==== ${ROUTE_TYPE} ADD BLOG POST ERROR ==== \n error:`, err);
+      res.status(500).json(errorCodes.server_error);
+    }
+  });
 };

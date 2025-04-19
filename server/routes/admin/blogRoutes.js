@@ -13,9 +13,9 @@ const Blog = mongoose.model("blogposts");
 const ROUTE_TYPE = "ADMIN";
 
 module.exports = (app) => {
-  // =======================
+  // ============================
   // ==== GET ALL BLOG POSTS ====
-  // =======================
+  // ============================
   app.post("/api/v1/admin/get/blog", requireLogin, async (req, res) => {
     console.log(`==== ${ROUTE_TYPE} GET BLOG POSTS ==== \n body:`, req.body);
     try {

@@ -13,6 +13,7 @@ import {
   useTheme,
   Divider,
   Button,
+  Chip,
 } from "@mui/material";
 
 // ==== COMPONENTS ====
@@ -106,19 +107,91 @@ const BlogPost = ({ post, fetchData, showLess }) => {
           border: "2px solid rgba(7, 7, 7, 1)",
           borderRadius: "30px",
           boxShadow: "0px 4px 0px 0px rgba(7, 7, 7, 1)",
+          mb: 2,
         }}
       >
         <Box display="flex" justifyContent="space-between" mb={2}>
-          <Box display="flex" alignItems="center" gap={2}>
-            <Avatar src={post.image} />
-            <Typography variant="h6">{post.movie}</Typography>
+          <Box display="flex" alignItems="start" gap={2}>
+            <img
+              src={post.image}
+              alt={post.movie}
+              style={{ width: "auto", height: "180px", borderRadius: "5px" }}
+            />
+            <Box>
+              <Typography variant="h6" fontWeight="bold">
+                {post.movie}
+              </Typography>
+              {post.rating && (
+                <Typography
+                  mt={1}
+                  variant="body1"
+                  display="flex"
+                  alignItems="center"
+                  gap={1}
+                >
+                  <Iconify
+                    icon="material-symbols:star-rounded"
+                    sx={{
+                      color: "#FFB641",
+                    }}
+                  />
+                  {post.rating}
+                </Typography>
+              )}
+              <Box display="flex" alignItems="center" gap={1} mt={1}>
+                {post.genre &&
+                  post.genre.split(",").map((genre) => (
+                    <Chip
+                      label={genre}
+                      key={genre}
+                      sx={{
+                        backgroundColor: "#0074D2",
+                        color: "white",
+                      }}
+                    />
+                  ))}
+              </Box>
+              <Typography variant="body1">{post.director}</Typography>
+              <Typography variant="body1">Overview</Typography>
+              <Typography variant="caption">{post.description}</Typography>
+            </Box>
           </Box>
           <Typography variant="body1">
             {moment(post.createdAt).fromNow()}
           </Typography>
         </Box>
+        <Typography variant="h6" fontWeight="bold" mb={2}>
+          {post.title}
+        </Typography>
         <Typography variant="body1" mb={2}>
-          {showLess ? post.content.slice(0, maxLength) + "..." : post.content}
+          <Box
+            sx={{
+              position: "relative",
+              maxHeight: "100px",
+              overflow: "hidden",
+              "&::after":
+                showLess && post.content.length > maxLength
+                  ? {
+                      content: '""',
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      height: "100px",
+                      background: `linear-gradient(180deg, transparent, ${theme.palette.background.paper})`,
+                    }
+                  : {},
+            }}
+          >
+            <RichTextBox
+              value={post.content}
+              readOnly={true}
+              sx={{
+                maxHeight: showLess ? "200px" : "none",
+                overflow: showLess ? "hidden" : "visible",
+              }}
+            />
+          </Box>
         </Typography>
         {showLess && post.content.length > maxLength && (
           <Link

@@ -8,6 +8,7 @@ import {
   Container,
   Paper,
   Button,
+  TextField,
 } from "@mui/material";
 
 // ==== IMPORT COMPONENTS ====
@@ -26,6 +27,7 @@ import {
   selectBlogPosts,
 } from "@/redux/reducers/user/blogPostReducer";
 import { selectAuthData } from "@/redux/reducers/authReducer";
+import BlogPostForm from "./blog/BlogPostForm";
 const Home = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -186,18 +188,7 @@ const Home = () => {
                   },
                 }}
               >
-                <Typography variant="h6" mb={2}>
-                  Write a blog post
-                </Typography>
-                <RichTextBox />
-                <Box display="flex" justifyContent="flex-end" mt={2} gap={2}>
-                  <PrimaryButton
-                    variant="contained"
-                    color="background.darkPaper"
-                  >
-                    Publish
-                  </PrimaryButton>
-                </Box>
+                <BlogPostForm />
               </Box>
               {!isProUser && (
                 <Box
