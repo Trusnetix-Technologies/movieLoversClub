@@ -19,14 +19,18 @@ const PageWrapper = ({ children, title, description, selectedMenuItem }) => {
     }
   }, [dispatch]);
 
+  console.log(auth);
+
   useEffect(() => {
     if (auth.loading == "loaded") {
-      if (auth.error) {
+      if (auth.error == "error") {
         router.push("/login");
       }
       if (auth.authData.isOnboarded == false) {
         router.push("/onboard");
       }
+    } else if (auth.loading == "error") {
+      router.push("/login");
     }
   }, [auth.loading]);
 

@@ -18,6 +18,7 @@ import {
 
 // ==== COMPONENTS ====
 import IconButton from "@mui/material/IconButton";
+import Comment from "./Comment";
 import RichTextBox from "../../common/RichTextBox";
 import PaymentDialog from "../payment/PaymentDialog";
 import { PrimaryButton } from "@/styles/mui/themeComponents";
@@ -207,7 +208,15 @@ const BlogPost = ({ post, fetchData, showLess }) => {
         )}
         <Box display="flex" alignItems="center" gap={2}>
           <Box display="flex" alignItems="center" mt={2}>
-            <IconButton onClick={handleLike}>
+            <IconButton
+              onClick={() => {
+                if (isLoggedIn) {
+                  handleLike();
+                } else {
+                  router.push("/login");
+                }
+              }}
+            >
               <Iconify
                 icon={
                   likes.likes.find((like) => like.blog === post._id)
@@ -338,7 +347,7 @@ const BlogPost = ({ post, fetchData, showLess }) => {
 
           <Divider sx={{ mt: 2 }} />
           {post.comments.map((comment, i) => (
-            <RichTextBox
+            <Comment
               key={comment._id}
               comment={comment}
               isMyComment={comment.author._id == auth.authData._id}
