@@ -1,10 +1,11 @@
+const fs = require("fs");
 const mongoose = require("mongoose");
-
 // ==== IMPORT SERVICES ====
 const errorCodes = require("../../services/errorCodes");
 
 // ==== IMPORT MIDDLEWARE ====
 const { requireLogin } = require("../../middleware/requireLogin");
+const { s3, upload } = require("../../services/aws");
 
 // ==== IMPORT MODELS ====
 const Blog = mongoose.model("blogposts");
@@ -294,37 +295,58 @@ module.exports = (app) => {
   // =======================
   // ==== ADD BLOG POST ====
   // =======================
-  app.post("/api/v1/user/add/blog", requireLogin, async (req, res) => {
-    console.log(`==== ${ROUTE_TYPE} ADD BLOG POST ==== \n body:`, req.body);
-    try {
-      const {
-        title,
-        description,
-        content,
-        movie,
-        director,
-        image,
-        genre,
-        rating,
-      } = req.body;
-      const user = req.user;
+  app.post(
+    "/api/v1/user/add/blog",
+    upload.single("image"),
+    requireLogin,
+    async (req, res) => {
+      console.log(`==== ${ROUTE_TYPE} ADD BLOG POST ==== \n body:`, req.body);
+      try {
+        const {
+          title,
+          description,
+          content,
+          movie,
+          director,
+          genre,
+          rating,
+          image,
+        } = req.body;
+        const user = req.user;
 
-      const blog = await Blog.create({
-        title,
-        content,
-        description,
-        movie,
-        director,
-        image,
-        genre,
-        rating,
-        author: user.id,
-      });
+        if (req.file) {
+          const uploadFile = await s3
+            .upload({
+              Bucket: process.env.AWS_BUCKET_NAME,
+              Key: `blog-images/${req.file.filename}`,
+              Body: fs.createReadStream(req.file.path),
+              ContentType: req.file.mimetype,
+              ACL: "public-read",
+            })
+            .promise();
+          image = uploadFile.Location;
+        }
 
-      return res.json({ message: "Blog post added successfully", blog });
-    } catch (err) {
-      console.log(`==== ${ROUTE_TYPE} ADD BLOG POST ERROR ==== \n error:`, err);
-      res.status(500).json(errorCodes.server_error);
+        const blog = await Blog.create({
+          title,
+          content,
+          description,
+          movie,
+          director,
+          image,
+          genre,
+          rating,
+          author: user.id,
+        });
+
+        return res.json({ message: "Blog post added successfully", blog });
+      } catch (err) {
+        console.log(
+          `==== ${ROUTE_TYPE} ADD BLOG POST ERROR ==== \n error:`,
+          err
+        );
+        res.status(500).json(errorCodes.server_error);
+      }
     }
-  });
+  );
 };

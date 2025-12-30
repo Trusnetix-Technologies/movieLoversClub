@@ -9,7 +9,10 @@ export const addBlogPost = async (values, storeHooks) => {
   try {
     const cookieData = await cookies.getAll();
     const res = await axios.post("/api/v1/user/add/blog", values, {
-      headers: { Authorization: cookieData.userToken },
+      headers: {
+        Authorization: cookieData.userToken,
+        "Content-Type": "multipart/form-data",
+      },
     });
 
     if (res.status == 200) {

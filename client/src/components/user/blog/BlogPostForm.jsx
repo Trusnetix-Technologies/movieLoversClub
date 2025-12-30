@@ -1,5 +1,14 @@
-import { useState, useEffect, useContext } from "react";
-import { Typography, TextField, Box, Autocomplete } from "@mui/material";
+import { useState, useEffect, useContext, useRef } from "react";
+import {
+  Typography,
+  TextField,
+  Box,
+  Autocomplete,
+  IconButton,
+} from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ImageIcon from "@mui/icons-material/Image";
 import RichTextBox from "@/components/common/RichTextBox";
 import { PrimaryButton } from "@/styles/mui/themeComponents";
 
@@ -12,12 +21,15 @@ import { fetchBlogPosts } from "@/redux/reducers/user/blogPostReducer";
 const BlogPostForm = () => {
   const dispatch = useDispatch();
   const storeHooks = useContext(StoreHooks);
+  const fileInputRef = useRef(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [movieName, setMovieName] = useState("");
   const [director, setDirector] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(""); // URL from OMDB or uploaded file URL
+  const [imageFile, setImageFile] = useState(null); // File object for upload
+  const [imagePreview, setImagePreview] = useState(""); // Preview URL for selected file
   const [genre, setGenre] = useState("");
   const [rating, setRating] = useState("");
   const [showTextFields, setShowTextFields] = useState(false);
@@ -30,6 +42,56 @@ const BlogPostForm = () => {
       setShowTextFields(true);
     }
   }, [content]);
+
+  // Clean up image preview URL when component unmounts or image changes
+  useEffect(() => {
+    return () => {
+      if (imagePreview && imagePreview.startsWith("blob:")) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
+
+  // Handle file selection
+  const handleFileSelect = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        storeHooks.handleOpenSnackBar("Please select an image file", "error");
+        return;
+      }
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        storeHooks.handleOpenSnackBar(
+          "Image size should be less than 5MB",
+          "error"
+        );
+        return;
+      }
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+      setImage(""); // Clear OMDB image when custom image is selected
+    }
+  };
+
+  // Clear selected image
+  const handleClearImage = () => {
+    setImageFile(null);
+    if (imagePreview && imagePreview.startsWith("blob:")) {
+      URL.revokeObjectURL(imagePreview);
+    }
+    setImagePreview("");
+    setImage("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  // Trigger file input click
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
 
   // Add debounce function to prevent too many API calls
   const debounce = (func, delay) => {
@@ -62,24 +124,31 @@ const BlogPostForm = () => {
   const handleAddBlogPost = async () => {
     if (isPublishing) return;
     setIsPublishing(true);
-    const values = {
-      title,
-      description,
-      content,
-      movie: movieName,
-      director,
-      image,
-      genre,
-      rating,
-    };
-    const res = await addBlogPost(values, storeHooks);
+
+    const formData = new FormData();
+    if (imageFile) {
+      formData.append("image", imageFile);
+    } else {
+      formData.append("image", image);
+    }
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("content", content);
+    formData.append("movie", movieName);
+    formData.append("director", director);
+    formData.append("genre", genre);
+    formData.append("rating", rating);
+
+    const res = await addBlogPost(formData, storeHooks);
     if (res.status == 200) {
       setTitle("");
       setDescription("");
       setContent("");
       setMovieName("");
       setDirector("");
-      setImage("");
+      handleClearImage();
+      setGenre("");
+      setRating("");
       setShowTextFields(false);
       setMovieSuggestions([]);
       setIsPublishing(false);
@@ -89,6 +158,8 @@ const BlogPostForm = () => {
           pageSize: 10,
         })
       );
+    } else {
+      setIsPublishing(false);
     }
   };
 
@@ -161,13 +232,109 @@ const BlogPostForm = () => {
           sx={{ mb: 2 }}
         />
       )}
-      {image && (
-        <Box>
-          <img
-            src={image}
-            alt="Movie Poster"
-            style={{ width: "auto", height: "100px" }}
+
+      {/* Image Picker Section */}
+      {showTextFields && (
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="body2" color="text.secondary" mb={1}>
+            Poster Image
+          </Typography>
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handleFileSelect}
+            style={{ display: "none" }}
           />
+
+          {/* Show preview if image exists */}
+          {imagePreview || image ? (
+            <Box
+              sx={{
+                position: "relative",
+                display: "inline-block",
+                borderRadius: 2,
+                overflow: "hidden",
+                border: "1px solid",
+                borderColor: "divider",
+              }}
+            >
+              <img
+                src={imagePreview || image}
+                alt="Poster Preview"
+                style={{
+                  width: "auto",
+                  height: "140px",
+                  display: "block",
+                  objectFit: "cover",
+                }}
+              />
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 4,
+                  right: 4,
+                  display: "flex",
+                  gap: 0.5,
+                }}
+              >
+                <IconButton
+                  size="small"
+                  onClick={handleUploadClick}
+                  sx={{
+                    bgcolor: "rgba(0,0,0,0.6)",
+                    color: "white",
+                    "&:hover": { bgcolor: "rgba(0,0,0,0.8)" },
+                  }}
+                >
+                  <CloudUploadIcon fontSize="small" />
+                </IconButton>
+                <IconButton
+                  size="small"
+                  onClick={handleClearImage}
+                  sx={{
+                    bgcolor: "rgba(0,0,0,0.6)",
+                    color: "white",
+                    "&:hover": { bgcolor: "error.main" },
+                  }}
+                >
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </Box>
+            </Box>
+          ) : (
+            /* Upload button when no image */
+            <Box
+              onClick={handleUploadClick}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 160,
+                height: 140,
+                border: "2px dashed",
+                borderColor: "divider",
+                borderRadius: 2,
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                "&:hover": {
+                  borderColor: "primary.main",
+                  bgcolor: "action.hover",
+                },
+              }}
+            >
+              <ImageIcon
+                sx={{ fontSize: 40, color: "text.secondary", mb: 1 }}
+              />
+              <Typography variant="caption" color="text.secondary">
+                Click to upload
+              </Typography>
+              <Typography variant="caption" color="text.disabled">
+                Max 5MB
+              </Typography>
+            </Box>
+          )}
         </Box>
       )}
       <RichTextBox value={content} setValue={setContent} />
